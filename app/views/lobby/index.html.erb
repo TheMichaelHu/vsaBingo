@@ -1,14 +1,14 @@
 <center><h1>VSA Bingo!</h1></center>
 <section>
   <div class="container">
-    <%= form_tag do %>
-      <%= label_tag(:room_id, "Join a Room:") %>
-      <%= text_field_tag(:room_id) %>
+    <%= form_tag action: :join do %>
+      <%= label_tag(:code, "Join a Room:") %>
+      <%= text_field_tag(:code) %>
       <%= button_tag(type: 'submit', class: "btn btn-primary") do %>
         <%= fa_icon "sign-in", text: "Join" %>
       <% end %>
     <% end %>
     <h2>or...</h2>
-    <%= button_to "Create a Room", {action: :new, controller: :room}, {class: "btn btn-primary"} %>
+    <%= button_to "Create a Room", {controller: :rooms, action: :new}, {class: "btn btn-primary", method: 'get'} %>
   </div>
 </section>

@@ -4,7 +4,9 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'lobby#index'
-  resources :room, except: [:index, :destroy]
+  get 'lobby/join/:code' => 'lobby#join'
+  post 'lobby/join' => 'lobby#join'
+  resources :rooms, except: [:index, :destroy]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
