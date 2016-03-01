@@ -1,4 +1,14 @@
-<h2>Hello World</h2>
-<p>
-	The time is now: <%= Time.now %>
-</p>
+<center><h1>VSA Bingo!</h1></center>
+<section>
+  <div class="container">
+    <%= form_tag do %>
+      <%= label_tag(:room_id, "Join a Room:") %>
+      <%= text_field_tag(:room_id) %>
+      <%= button_tag(type: 'submit', class: "btn btn-primary") do %>
+        <%= fa_icon "sign-in", text: "Join" %>
+      <% end %>
+    <% end %>
+    <h2>or...</h2>
+    <%= button_to "Create a Room", {action: :new, controller: :room}, {class: "btn btn-primary"} %>
+  </div>
+</section>
