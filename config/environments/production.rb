@@ -1,4 +1,5 @@
 Rails.application.configure do
+  config.redis_options = {:host => 'tarpon.redistogo.com', :port => '10810', :user => 'redistogo', :password => '222473d9cfb996ef1feb29257334f40b'}
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.

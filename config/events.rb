@@ -1,3 +1,3 @@
 WebsocketRails::EventMap.describe do
-  subscribe :messages, to: MessagesController, with_method: :message_receive
+  subscribe :bingo_message, to: MessagesController, with_method: :message_receive
 end
