@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.4'
-
+gem 'pg', '~> 0.15'
 gem 'websocket-rails'
 
 # Use SCSS for stylesheets
@@ -27,17 +27,23 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',        group: :development
 
+group :development, :test do
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug'
+end
+
 group :development do
   # Use sqlite3 as the database for Active Record
-  gem 'sqlite3'
+  gem 'web-console', '~> 2.0'
 end
 
 group :production do
-  gem 'pg', '0.17.1'
   gem 'rails_12factor', '0.0.2'
 end
 
 gem 'eventmachine', '~>1.0.4'
+gem 'bootstrap-sass', '~> 3.3.6'
+gem "font-awesome-rails"
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -50,4 +56,3 @@ gem 'eventmachine', '~>1.0.4'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
