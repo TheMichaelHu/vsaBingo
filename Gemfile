@@ -48,4 +48,5 @@ end
 gem 'rails_12factor', group: :production
 gem 'bootstrap-sass', '~> 3.3.6'
 gem "font-awesome-rails"
+gem 'websocket-rails'
 ruby '2.2.4'
