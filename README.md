@@ -13,4 +13,5 @@ Server based bingo game Rails app, hosted [here](https://salty-thicket-55431.her
 
 # Local websocket setup
 1. Install and start redis `redis-server /usr/local/etc/redis.conf &`
-2. Start the websocket server `rake websocket_rails:start_server`
+2. Start the websocket server `bundle exec rake websocket_rails:start_server`
+3. start the dev server `rails s`

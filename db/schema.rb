@@ -11,17 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160301013605) do
+ActiveRecord::Schema.define(version: 20160303023316) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "rooms", force: :cascade do |t|
-    t.string   "name"
-    t.string   "code"
-    t.boolean  "started"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "players", force: true do |t|
+    t.string   "name",       limit: 20
+    t.string   "image_url"
+    t.integer  "room_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "players", ["room_id"], name: "index_players_on_room_id", using: :btree
+
+  create_table "rooms", force: true do |t|
+    t.string   "name",       limit: 20
+    t.string   "code",       limit: nil
+    t.boolean  "started",                default: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
   end
 
 end
