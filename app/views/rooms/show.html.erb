@@ -1,4 +1,4 @@
-<h2>This is the show page for <b><%= @room.name %></b></h2>
+<h2>This is the show page for <b><%= @room.name %></b> (<%= @room.code %>)</h2>
 <p>Your name is <%= @player.name %></p>
-<p>There are currently <%= @room.players.length %> players in this room</p>
+<p>There are currently <%= @players.length %> players in this room</p>
 <%= button_to "Let's play Bingo!", {controller: :bingo, action: :play}, {class: "btn btn-primary", method: 'get'} %>

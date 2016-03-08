@@ -8,6 +8,16 @@
 </head>
 <body>
 
+<% if Rails.env.production? %>
+<script>
+  var dispatcher = new WebSocketRails("salty-thicket-55431.herokuapp.com/websocket");
+</script>
+<% else %>
+<script>
+  var dispatcher = new WebSocketRails("localhost:3001/websocket");
+</script>
+<% end %>
+
 <%= yield %>
 
 </body>

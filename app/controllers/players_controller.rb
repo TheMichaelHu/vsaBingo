@@ -2,9 +2,10 @@ class PlayersController < ApplicationController
   def create
     @player = Player.new(player_params)
     if @player.save
-      redirect_to controller: :rooms, action: :show, id: @player.room_id, player: @player.id
+      cookies[:player_id] = @player.id
+      redirect_to controller: :rooms, action: :show, id: @player.room_id
     else
-      redirect_to controller: :lobby, action: :join, code: Room.find(params[:room_id]).code
+      redirect_to controller: :lobby, action: :index
     end
   end
 
