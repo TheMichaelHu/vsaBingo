@@ -2,15 +2,16 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+#bingo {
+  .bingo-card {
+      width: 250px;
+      height: 250px;
+  }
 
-div {
-    width: 250px;
-    height: 250px;
-}
-
-div div {
-    width: 50px;
-    height: 50px;
-    outline: 1px solid;
-    float: left;
+  .bingo-card .bingo-square {
+      width: 50px;
+      height: 50px;
+      outline: 1px solid;
+      float: left;
+  }
 }
