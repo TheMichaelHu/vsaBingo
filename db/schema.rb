@@ -28,10 +28,10 @@ ActiveRecord::Schema.define(version: 20160303023316) do
 
   create_table "rooms", force: true do |t|
     t.string   "name",       limit: 20
-    t.string   "code",       limit: nil
-    t.boolean  "started",                default: false
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.string   "code"
+    t.boolean  "started",               default: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
   end
 
 end
