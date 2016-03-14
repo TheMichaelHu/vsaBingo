@@ -1,9 +1,5 @@
 <h2>This is the show page for <b><%= @room.name %></b> (<%= @room.code %>)</h2>
 <p>Your name is <%= @player.name %></p>
-<<<<<<< HEAD
-<p>There are currently <%= @players.length %> players in this room</p>
-<%= button_to "Let's play Bingo!", {controller: :bingo, action: :play}, {class: "btn btn-primary", method: 'get'} %>
-=======
 <p>There are currently <span id="player-num"></span> players in this room</p>
 <button class="btn btn-primary start-btn">Let's play Bingo!</button>
 
@@ -37,4 +33,3 @@
     dispatcher.trigger("room_message", msg)
   }
 </script>
->>>>>>> 6f9192d8ae9ec399de55d5ef183f8a6597d29131

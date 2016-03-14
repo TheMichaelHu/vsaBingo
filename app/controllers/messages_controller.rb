@@ -1,10 +1,9 @@
 class MessagesController < WebsocketRails::BaseController
-<<<<<<< HEAD
   def message_receive
     receive_message = message()
     broadcast_message(:bingo_message, receive_message)
   end
-=======
+
   def initialize_session
     controller_store = {}
   end
@@ -36,5 +35,4 @@ class MessagesController < WebsocketRails::BaseController
   def send_update(room)
     broadcast_message room.to_s, {type: "update", data: controller_store[room].length}
   end
->>>>>>> 6f9192d8ae9ec399de55d5ef183f8a6597d29131
 end
