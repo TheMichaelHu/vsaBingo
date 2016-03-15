@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <div id="bingo">
   <script>
     timer = setTimeout(function, milliseconds)
@@ -11,3 +12,29 @@
     <% end %>
   </div>
 </div>
+=======
+<div ng-controller='TimeCtrl'>
+    <p>{{ clock | date:'medium'}}</p>
+</div>
+
+<script>
+function TimeCtrl($scope, $timeout) {
+    $scope.clock = "loading clock..."; // initialise the time variable
+    $scope.tickInterval = 1000 //ms
+
+    var tick = function () {
+        $scope.clock = Date.now() // get the current time
+        $timeout(tick, $scope.tickInterval); // reset the timer
+    }
+
+    // Start the timer
+    $timeout(tick, $scope.tickInterval);
+}
+</script>
+    <h1> hello </h1>
+    <div>
+      <% for i in 0..25 do %>
+         <div> hi</div>
+      <% end %>
+    </div>
+>>>>>>> Stashed changes
