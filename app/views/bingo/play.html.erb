@@ -53,6 +53,12 @@
     send("leave");
   };
 
+  dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
+    if(msg["type"] == "update") {
+      console.log(msg)
+    } 
+  });
+
   </script>
 
   <body>

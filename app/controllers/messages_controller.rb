@@ -22,6 +22,7 @@ class MessagesController < WebsocketRails::BaseController
       send_room_update room
     elsif msg["type"] == "start"
       controller_store[room][:num_players] = controller_store[room][:players].length
+      controller_store[room][:started] = false
       send_message room, "start"
     end
   end
@@ -32,21 +33,12 @@ class MessagesController < WebsocketRails::BaseController
 
   def handle_bingo_message
     msg = message()
-    puts msg
     room = msg["room"].to_s
     player = msg["player"]
     players = controller_store[room][:players]
-    if msg["type"] == "join" and !controller_store[room]["started"]
-      if players.keys.include? player
-        players[player][:joined] = true
-      end
-
-      players_joined = 0
-      players.each do |player|
-        players_joined += 1 if player[:joined]
-      end
-      puts "#{players_joined} and #{controller_store[room][:num_players]}"
-      if players_joined >= controller_store[room][:num_players]
+    if msg["type"] == "join" and !controller_store[room][:started]
+      controller_store[room][:players][player] = {}
+      if players.length >= controller_store[room][:num_players]
         controller_store[room]["started"] = true
         handle_start(room)
       end
@@ -74,7 +66,7 @@ class MessagesController < WebsocketRails::BaseController
 
   def handle_start(room)
     players = controller_store[room][:players].keys
-    boards = generate_boards(player.length, (10..60).to_a, 25, 0.8)
+    boards = generate_boards(players.length, (10..60).to_a, 25, 0.8)
     (players.length).times do |n|
       controller_store[room][:players][players[n]][:name] = Player.find(players[n]).name # should refactor into one query
       controller_store[room][:players][players[n]][:board] = boards[n]
