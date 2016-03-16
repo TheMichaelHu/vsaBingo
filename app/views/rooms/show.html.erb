@@ -4,11 +4,11 @@
 <button class="btn btn-primary start-btn">Let's play Bingo!</button>
 
 <script>
-  dispatcher.on_open = function() { 
+  dispatcher.on_open = function() {
     send("join");
   };
 
-  window.onbeforeunload = function() { 
+  window.onbeforeunload = function() {
     send("leave");
   };
 
@@ -19,6 +19,7 @@
   dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
     if(msg["type"] == "update") {
       $("#player-num").text(msg["count"])
+      console.log(msg)
     } else if (msg["type"] == "start") {
       console.log("GOING TO " + "<%= bingo_url %>")
       window.location.href = "<%= bingo_url %>";

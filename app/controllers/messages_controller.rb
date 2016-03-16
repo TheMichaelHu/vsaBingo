@@ -32,6 +32,7 @@ class MessagesController < WebsocketRails::BaseController
 
   def handle_bingo_message
     msg = message()
+    puts msg
     room = msg["room"].to_s
     player = msg["player"]
     players = controller_store[room][:players]
@@ -44,7 +45,7 @@ class MessagesController < WebsocketRails::BaseController
       players.each do |player|
         players_joined += 1 if player[:joined]
       end
-
+      puts "#{players_joined} and #{controller_store[room][:num_players]}"
       if players_joined >= controller_store[room][:num_players]
         controller_store[room]["started"] = true
         handle_start(room)
@@ -105,13 +106,13 @@ class MessagesController < WebsocketRails::BaseController
     boards = []
     num_rows = Math.sqrt(board_size).to_i
 
-    num_boards.times do 
+    num_boards.times do
       board_nums = init_board_numbers.shuffle.take((board_size * similarity).to_i)
       board_nums.concat unused_numbers.shuffle.take(board_size - board_nums.length)
       board = []
-      num_rows.times do |row| 
+      num_rows.times do |row|
         board.push []
-        num_rows.times do |col| 
+        num_rows.times do |col|
           board[row].push({number: board_nums[col * num_rows + row], called: false})
         end
       end
@@ -122,7 +123,7 @@ class MessagesController < WebsocketRails::BaseController
   end
 
   def get_victor(room, points)
-    controller_store[room][:players].each do |key, value| 
+    controller_store[room][:players].each do |key, value|
       if board_points(value[:board]) >= points
         return key
       end

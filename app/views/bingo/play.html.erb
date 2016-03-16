@@ -1,8 +1,63 @@
 <div id="bingo">
   <script>
-    timer = setTimeout(function, milliseconds)
-    window.clearTimeout(time);
+  function startTimer(duration, display) {
+      var timer = duration, minutes, seconds;
+      timestring = "You will combust in " + minutes + ":" + seconds + " seconds!"
+      setInterval(function () {
+          minutes = parseInt(timer / 60, 10);
+          seconds = parseInt(timer % 60, 10);
+
+          minutes = minutes < 10 ? "0" + minutes : minutes;
+          seconds = seconds < 10 ? "0" + seconds : seconds;
+
+          display.textContent = timestring
+
+
+          if (timer > 0) {
+            timer--
+            timestring = "You will combust in " + timer + " seconds!"
+            display.textContent = timestring
+
+          }
+          else if (timer == 0) {
+            send("number",1 /* GOTS TO CHANGE THIS LATER */)
+            timer--
+          }
+          else {
+            timestring = "TIMES UP boob"
+            display.textContent = timestring
+
+          }
+      }, 1000);
+  }
+
+  window.onload = function () {
+      var fifteensecs = 3,
+          display = document.querySelector('#timestring');
+      startTimer(fifteensecs, display);
+  };
+
+  function send(type) {
+    msg = {"type": type,
+      "player": <%= @player.id %>,
+      "room": <%= @room.id %>}
+    console.log(msg);
+    dispatcher.trigger("bingo_message", msg)
+  }
+
+  dispatcher.on_open = function() {
+    send("join");
+  };
+
+  window.onbeforeunload = function() {
+    send("leave");
+  };
+
   </script>
+
+  <body>
+      <div><span id="timestring"></span></div>
+  </body>
 
   <h1> hello </h1>
   <div class="bingo-card">

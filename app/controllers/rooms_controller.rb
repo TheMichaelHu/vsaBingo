@@ -11,6 +11,7 @@ class RoomsController < ApplicationController
     if @room.save
       @player = Player.create(name: params[:players][:name], room_id: @room.id)
       cookies[:player_id] = @player.id
+      cookies[:rooms_code] = @room.code
       redirect_to controller: :rooms, action: :show, id: @room.id
     else
       render :new
