@@ -53,22 +53,20 @@
     send("leave");
   };
 
-  dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
-    if(msg["type"] == "update") {
-      console.log(msg)
-    } 
-  });
-
   </script>
+<center>
+  <h1>
+      <div class = "timer" ><span id="timestring"></span></div>
+  </h1>
 
-  <body>
-      <div><span id="timestring"></span></div>
-  </body>
+  <div class = "player-info">
+    <body> "Player Name: " <%= @player.name %> </body>
+  </div>
 
-  <h1> hello </h1>
   <div class="bingo-card">
     <% for i in 0..24 do %>
        <div class="bingo-square"> hi</div>
     <% end %>
   </div>
 </div>
+</center>
