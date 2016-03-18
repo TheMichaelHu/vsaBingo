@@ -1,6 +1,6 @@
 class BingoController < ApplicationController
   def play
-     @room = Room.where('upper(code) = ?', cookies[:room_code].upcase).first
+     @room = Room.find(cookies[:room_id])
      @player = Player.find(cookies[:player_id])
 
   end
