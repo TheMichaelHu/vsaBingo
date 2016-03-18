@@ -55,9 +55,26 @@
 
   dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
     if(msg["type"] == "update") {
+      $("#player-num").text(msg["count"])
       console.log(msg)
-    } 
+    } else if (msg["type"] == "start") {
+      console.log("GOING TO " + "<%= bingo_url %>")
+      window.location.href = "<%= bingo_url %>";
+    }
   });
+
+  dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
+    if(msg["type"] == "update") {
+      for (var i = 0; i <= 24; i++) {
+        console.log(msg["players"])
+        var sqNum = msg["players"][<%=@player.id%>]["board"][i/5][i%5]["number"];
+        $("square-" + i).text(sqNum);
+        console.log(sqNum)
+      }
+    }
+  });
+
+
 
   </script>
 <center>
@@ -71,7 +88,7 @@
 
   <div class="bingo-card">
     <% for i in 0..24 do %>
-       <div class="bingo-square"> hi</div>
+       <div class="bingo-square" id=<%= "square-#{i}" %>> hi </div>
     <% end %>
   </div>
 </div>
