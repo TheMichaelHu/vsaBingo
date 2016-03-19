@@ -54,14 +54,14 @@ class MessagesController < WebsocketRails::BaseController
       end
 
     elsif msg["type"] == "leave" and controller_store[room][:started]
-      next_turn(room) if controller_store[room][:turn] == player
+      next_turn(room) if controller_store[room][:turn].id == player
       controller_store[room][:players].delete player
       players = controller_store[room][:players].keys
       (players.length).times do |n|
-        controller_store[room][:players][players[n]][:next] = players[n - 1]
+        controller_store[room][:players][players[n]][:next] = {id: players[n - 1], name: Player.find(players[n - 1]).name}
       end
 
-    elsif msg["type"] == "number" and player == controller_store[room][:turn]
+    elsif msg["type"] == "number" and player == controller_store[room][:turn].id
       handle_number(room, msg["number"])
       victor = get_victor(room, 5)
       if victor.nil?
@@ -91,9 +91,9 @@ class MessagesController < WebsocketRails::BaseController
     (players.length).times do |n|
       controller_store[room][:players][players[n]][:name] = Player.find(players[n]).name # should refactor into one query
       controller_store[room][:players][players[n]][:board] = boards[n]
-      controller_store[room][:players][players[n]][:next] = players[n - 1]
+      controller_store[room][:players][players[n]][:next] = {id: players[n - 1], name: Player.find(players[n - 1]).name}
     end
-    controller_store[room][:turn] = players.first
+    controller_store[room][:turn] = { id: players.first, name: Player.find(players.first).name }
     send_bingo_update room
   end
 

@@ -31,8 +31,12 @@
       }, 1000);
   }
 
+  function stopTimer() {
+
+  }
+
   window.onload = function () {
-      var fifteensecs = 3,
+      var fifteensecs = 15,
           display = document.querySelector('#timestring');
       startTimer(fifteensecs, display);
   };
@@ -56,24 +60,20 @@
   dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
     if(msg["type"] == "update") {
       for (var i = 0; i <= 24; i++) {
+        console.log(msg)
         var sqNum = msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["number"];
         $("#square-" + i).text(sqNum);
         if(msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["called"]) {
-          $('#square-'+i).addClass("called");
+          $('#square-'+ i).addClass("called");
         }
-        $('#square-'+i).click(function() {
+        $('#square-'+ i).click(function() {
           dispatcher.trigger("bingo_message", { type: "number", player: <%=@player.id%>, room: <%=@room.id%>, message: sqNum});
-          console.log("hi")
+          console.log({ type: "number", player: <%=@player.id%>, room: <%=@room.id%>, message: $(this).text()})
         })
       }
+      $(".current-player").text("Current Player: " + msg["turn"]["name"])
     }
   });
-
-
-
-
-
-
 
   </script>
 <center>
@@ -81,9 +81,10 @@
       <div class = "timer" ><span id="timestring"></span></div>
   </h1>
 
-  <div class = "player-info">
-    <body> "Player Name: " <%= @player.name %> </body>
+  <div class = "player-info"> Player Name: " <%= @player.name %>
   </div>
+
+  <div class = "current-player">  </div>
 
   <div class="bingo-card">
     <% for i in 0..24 do %>
