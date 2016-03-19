@@ -1,5 +1,6 @@
 <div id="bingo">
   <script>
+  var hasBeenClicked = false
   function startTimer(duration, display) {
       var timer = duration, minutes, seconds;
       timestring = "You will combust in " + minutes + ":" + seconds + " seconds!"
@@ -13,27 +14,30 @@
           display.textContent = timestring
 
 
-          if (timer > 0) {
+
+          if (hasBeenClicked == true) {
+            timestring = "thx bruh -- now wait for other peeps"
+            display.textContent = timestring
+          }
+
+          else if (timer > 0) {
             timer--
             timestring = "You will combust in " + timer + " seconds!"
             display.textContent = timestring
-
           }
+
           else if (timer == 0) {
             send("number",1 /* GOTS TO CHANGE THIS LATER */)
             timer--
           }
+
           else {
             timestring = "TIMES UP boob"
             display.textContent = timestring
-
           }
       }, 1000);
   }
 
-  function stopTimer() {
-
-  }
 
   window.onload = function () {
       var fifteensecs = 15,
@@ -69,6 +73,7 @@
         $('#square-'+ i).click(function() {
           dispatcher.trigger("bingo_message", { type: "number", player: <%=@player.id%>, room: <%=@room.id%>, message: sqNum});
           console.log({ type: "number", player: <%=@player.id%>, room: <%=@room.id%>, message: $(this).text()})
+          hasBeenClicked = true;
         })
       }
       $(".current-player").text("Current Player: " + msg["turn"]["name"])
