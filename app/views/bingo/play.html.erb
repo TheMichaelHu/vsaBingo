@@ -55,24 +55,23 @@
 
   dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
     if(msg["type"] == "update") {
-      $("#player-num").text(msg["count"])
-      console.log(msg)
-    } else if (msg["type"] == "start") {
-      console.log("GOING TO " + "<%= bingo_url %>")
-      window.location.href = "<%= bingo_url %>";
-    }
-  });
-
-  dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
-    if(msg["type"] == "update") {
       for (var i = 0; i <= 24; i++) {
-        console.log(msg["players"])
-        var sqNum = msg["players"][<%=@player.id%>]["board"][i/5][i%5]["number"];
-        $("square-" + i).text(sqNum);
-        console.log(sqNum)
+        var sqNum = msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["number"];
+        $("#square-" + i).text(sqNum);
+        if(msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["called"]) {
+          $('#square-'+i).addClass("called");
+        }
+        $('#square-'+i).click(function() {
+          dispatcher.trigger("bingo_message", { type: "number", player: <%=@player.id%>, room: <%=@room.id%>, message: sqNum});
+          console.log("hi")
+        })
       }
     }
   });
+
+
+
+
 
 
 

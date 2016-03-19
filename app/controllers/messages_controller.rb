@@ -22,7 +22,7 @@ class MessagesController < WebsocketRails::BaseController
       controller_store[room][:players].delete player
       send_room_update room
 
-    elsif msg["type"] == "start" and !controller_store[room][:starting]
+    elsif msg["type"] == "start" #and !controller_store[room][:starting]
       controller_store[room][:num_players] = controller_store[room][:players].length
       controller_store[room][:starting] = true
       controller_store[room][:started] = false
