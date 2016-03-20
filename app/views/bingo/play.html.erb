@@ -27,7 +27,7 @@
           }
 
           else if (timer == 0) {
-            send("number",1 /* GOTS TO CHANGE THIS LATER */)
+            // DO SOMETHING
             timer--
           }
 
@@ -49,7 +49,6 @@
     msg = {"type": type,
       "player": <%= @player.id %>,
       "room": <%= @room.id %>}
-    console.log(msg);
     dispatcher.trigger("bingo_message", msg)
   }
 
@@ -64,19 +63,21 @@
   dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
     if(msg["type"] == "update") {
       for (var i = 0; i <= 24; i++) {
-        console.log(msg)
         var sqNum = msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["number"];
         $("#square-" + i).text(sqNum);
         if(msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["called"]) {
           $('#square-'+ i).addClass("called");
         }
-        $('#square-'+ i).click(function() {
-          dispatcher.trigger("bingo_message", { type: "number", player: <%=@player.id%>, room: <%=@room.id%>, message: sqNum});
-          console.log({ type: "number", player: <%=@player.id%>, room: <%=@room.id%>, message: $(this).text()})
-          hasBeenClicked = true;
-        })
       }
+
       $(".current-player").text("Current Player: " + msg["turn"]["name"])
+
+      $('.bingo-square').off( "click" );
+      $('.bingo-square').click(function() {
+        dispatcher.trigger("bingo_message", { type: "number", player: <%=@player.id%>, room: <%=@room.id%>, message: $(this).text()});
+        console.log({ type: "number", player: <%=@player.id%>, room: <%=@room.id%>, message: $(this).text()})
+        hasBeenClicked = true;
+      });
     }
   });
 

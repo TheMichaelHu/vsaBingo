@@ -61,8 +61,8 @@ class MessagesController < WebsocketRails::BaseController
         controller_store[room][:players][players[n]][:next] = {id: players[n - 1], name: Player.find(players[n - 1]).name}
       end
 
-    elsif msg["type"] == "number" and player == controller_store[room][:turn].id
-      handle_number(room, msg["number"])
+    elsif msg["type"] == "number" and player == controller_store[room][:turn][:id]
+      handle_number(room, msg["message"].to_i)
       victor = get_victor(room, 5)
       if victor.nil?
         send_bingo_update room
@@ -102,10 +102,11 @@ class MessagesController < WebsocketRails::BaseController
       players = controller_store[room][:players]
       players.keys.each do |player|
         board = players[player][:board]
-        board.each do |row|
-          row.each do |col|
-            if col[:number] == number
-              col[:called] = true
+        num_rows = board.length
+        num_rows.times do |row|
+          num_rows.times do |col|
+            if board[row][col][:number] == number
+              controller_store[room][:players][player][:board][row][col][:called] = true
               return
             end
           end
@@ -153,7 +154,7 @@ class MessagesController < WebsocketRails::BaseController
   end
 
   def board_points(board)
-    num_rows = Math.sqrt(board.length).to_i
+    num_rows = board.length
     points = 0
     diag_bingo = true
     diag_bingo_2 = true

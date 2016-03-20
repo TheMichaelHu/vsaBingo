@@ -19,9 +19,7 @@
   dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
     if(msg["type"] == "update") {
       $("#player-num").text(msg["count"])
-      console.log(msg)
     } else if (msg["type"] == "start") {
-      console.log("GOING TO " + "<%= bingo_url %>")
       window.location.href = "<%= bingo_url %>";
     }
   });
@@ -30,7 +28,6 @@
     msg = {"type": type,
       "player": <%= @player.id %>,
       "room": <%= @room.id %>}
-    console.log(msg);
     dispatcher.trigger("room_message", msg)
   }
 </script>
