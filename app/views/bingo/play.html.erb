@@ -1,5 +1,23 @@
 <div id="bingo">
-  <script>
+  <center>
+    <h1>
+        <div class = "timer" ><span id="timestring"></span></div>
+    </h1>
+
+    <div class = "player-info"> Player Name: " <%= @player.name %>
+    </div>
+
+    <div class = "current-player">  </div>
+
+    <div class="bingo-card">
+      <% for i in 0..24 do %>
+         <div class="bingo-square" id=<%= "square-#{i}" %>> hi </div>
+      <% end %>
+    </div>
+  </center>
+</div>
+
+<script>
   var hasBeenClicked = false
   function startTimer(duration, display) {
       var timer = duration, minutes, seconds;
@@ -12,8 +30,6 @@
           seconds = seconds < 10 ? "0" + seconds : seconds;
 
           display.textContent = timestring
-
-
 
           if (hasBeenClicked == true) {
             timestring = "thx bruh -- now wait for other peeps"
@@ -45,10 +61,12 @@
       startTimer(fifteensecs, display);
   };
 
-  function send(type) {
+  function send(type, message) {
+    message = message || ""
     msg = {"type": type,
       "player": <%= @player.id %>,
-      "room": <%= @room.id %>}
+      "room": <%= @room.id %>,
+      "message": message}
     dispatcher.trigger("bingo_message", msg)
   }
 
@@ -74,28 +92,16 @@
 
       $('.bingo-square').off( "click" );
       $('.bingo-square').click(function() {
-        dispatcher.trigger("bingo_message", { type: "number", player: <%=@player.id%>, room: <%=@room.id%>, message: $(this).text()});
-        console.log({ type: "number", player: <%=@player.id%>, room: <%=@room.id%>, message: $(this).text()})
+        send("number", $(this).text());
         hasBeenClicked = true;
       });
+    } else if(msg["type"] == "game_over") {
+      console.log("game over! " + msg["victor"]["name"] + " wins!");
+      if(<%=@player.id%> == msg["victor"]["id"]) {
+        send("victory_msg", "I won!");
+      }
+    } else if(msg["type"] == "victory_msg") {
+      console.log("victory message: " + msg["message"]);
     }
   });
-
-  </script>
-<center>
-  <h1>
-      <div class = "timer" ><span id="timestring"></span></div>
-  </h1>
-
-  <div class = "player-info"> Player Name: " <%= @player.name %>
-  </div>
-
-  <div class = "current-player">  </div>
-
-  <div class="bingo-card">
-    <% for i in 0..24 do %>
-       <div class="bingo-square" id=<%= "square-#{i}" %>> hi </div>
-    <% end %>
-  </div>
-</div>
-</center>
+</script>

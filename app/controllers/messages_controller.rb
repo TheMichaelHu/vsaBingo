@@ -67,10 +67,11 @@ class MessagesController < WebsocketRails::BaseController
       if victor.nil?
         send_bingo_update room
       else
-        broadcast_message room, {type: "game_over", turn: nil, players: controller_store[room][:players], victor: victor}
+        controller_store[room][:victor] = victor
+        broadcast_message room, {type: "game_over", turn: nil, players: controller_store[room][:players], victor: {id: victor, name: controller_store[room][:players][victor]["name"]}}
       end
 
-    elsif msg["type"] == "victory_msg" and player == controller_store[room][:victory]
+    elsif msg["type"] == "victory_msg" and player == controller_store[room][:victor]
       send_message(room, "victory_msg", msg["message"])
       delete_room(room)
     end
@@ -107,7 +108,7 @@ class MessagesController < WebsocketRails::BaseController
           num_rows.times do |col|
             if board[row][col][:number] == number
               controller_store[room][:players][player][:board][row][col][:called] = true
-              return
+              next
             end
           end
         end
@@ -118,7 +119,7 @@ class MessagesController < WebsocketRails::BaseController
   end
 
   def next_turn(room)
-    controller_store[room][:turn] = controller_store[room][:players][controller_store[room][:turn]][:next]
+    controller_store[room][:turn] = controller_store[room][:players][controller_store[room][:turn][:id]][:next]
   end
 
   def generate_boards(num_boards, numbers, board_size, similarity)
@@ -146,6 +147,7 @@ class MessagesController < WebsocketRails::BaseController
 
   def get_victor(room, points)
     controller_store[room][:players].each do |key, value|
+      puts "PLAYER #{key} has #{board_points(value[:board])} points out of #{points}"
       if board_points(value[:board]) >= points
         return key
       end
@@ -162,7 +164,7 @@ class MessagesController < WebsocketRails::BaseController
       row_bingo = true
       col_bingo = true
       diag_bingo = diag_bingo && board[n][n][:called]
-      diag_bingo_2 = diag_bingo_2 && board[num_rows-n-1][num_rows-n-1][:called]
+      diag_bingo_2 = diag_bingo_2 && board[n][num_rows-n-1][:called]
       num_rows.times do |m|
         row_bingo = row_bingo && board[n][m][:called]
         col_bingo = col_bingo && board[m][n][:called]
