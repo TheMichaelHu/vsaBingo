@@ -80,13 +80,7 @@
 
   dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
     if(msg["type"] == "update") {
-      for (var i = 0; i <= 24; i++) {
-        var sqNum = msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["number"];
-        $("#square-" + i).text(sqNum);
-        if(msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["called"]) {
-          $('#square-'+ i).addClass("called");
-        }
-      }
+      updateBoard(msg);
 
       $(".current-player").text("Current Player: " + msg["turn"]["name"])
 
@@ -96,6 +90,7 @@
         hasBeenClicked = true;
       });
     } else if(msg["type"] == "game_over") {
+      updateBoard(msg);
       console.log("game over! " + msg["victor"]["name"] + " wins!");
       if(<%=@player.id%> == msg["victor"]["id"]) {
         send("victory_msg", "I won!");
@@ -104,4 +99,14 @@
       console.log("victory message: " + msg["message"]);
     }
   });
+
+  function updateBoard(msg) {
+    for (var i = 0; i <= 24; i++) {
+      var sqNum = msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["number"];
+      $("#square-" + i).text(sqNum);
+      if(msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["called"]) {
+        $('#square-'+ i).addClass("called");
+      }
+    }
+  }
 </script>
