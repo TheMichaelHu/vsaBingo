@@ -11,34 +11,61 @@
 
     <div class="bingo-card">
       <% for i in 0..24 do %>
-         <div class="bingo-square" id=<%= "square-#{i}" %>> hi </div>
+         <div class="bingo-square <%= "square-#{i}" %>"> &nbsp; </div>
       <% end %>
     </div>
 
-    <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+    <div class="modal fade" id="win-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title" id="myModalLabel"><b>YOU WIN!</b></h2>
+          </div>
+          <div class="modal-body">
+            <h3>Your final board:</h3>
+            <br>
+            <div class="bingo-card">
+              <% for i in 0..24 do %>
+               <div class="bingo-square <%= "square-#{i}" %>"> &nbsp; </div>
+              <% end %>
+            </div>
+            <br>
+            <div class="victory-message">
+              Send a message to the losers:
+              <input id="victory-text" type="text">
+              <input class="btn btn-primary" id="victory-button" type="button" value="Send">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <%= button_to "Back to Lobby", {controller: :lobby, action: :index}, {class: "btn btn-primary", method: 'get'} %>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
+    <div class="modal fade" id="lose-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title" id="myModalLabel"><b>YOU LOSE :(</b></h3>
+          </div>
+          <div class="modal-body">
+            <h3>The winning board:</h3>
+            <br>
+            <div class="bingo-card">
+              <% for i in 0..24 do %>
+               <div class="bingo-square <%= "square-#{i}" %>"> &nbsp; </div>
+              <% end %>
+            </div>
+            <br>
+            <div class="victory-message"> &nbsp; </div>
+          </div>
+          <div class="modal-footer">
+            <%= button_to "Back to Lobby", {controller: :lobby, action: :index}, {class: "btn btn-primary", method: 'get'} %>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </center>
 </div>
@@ -92,8 +119,8 @@
     msg = {"type": type,
       "player": <%= @player.id %>,
       "room": <%= @room.id %>,
-      "message": message}
-    dispatcher.trigger("bingo_message", msg)
+      "message": message};
+    dispatcher.trigger("bingo_message", msg);
   }
 
   dispatcher.on_open = function() {
@@ -116,24 +143,40 @@
         hasBeenClicked = true;
       });
     } else if(msg["type"] == "game_over") {
-      updateBoard(msg);
-      console.log("game over! " + msg["victor"]["name"] + " wins!");
       if(<%=@player.id%> == msg["victor"]["id"]) {
-        $('#myModal').modal("show");
-        send("victory_msg", "I won!");
+        $('#win-modal').modal("show");
+      } else {
+        $('#lose-modal').modal("show");
       }
+      
+      for (var i = 0; i <= 24; i++) {
+        var sqNum = msg["players"][msg["victor"]["id"]]["board"][Math.floor(i/5)][i%5]["number"];
+        $(".square-" + i).text(sqNum);
+        if(msg["players"][msg["victor"]["id"]]["board"][Math.floor(i/5)][i%5]["called"]) {
+          $('.square-'+ i).addClass("called");
+        }
+      }
+
     } else if(msg["type"] == "victory_msg") {
-      console.log("victory message: " + msg["message"]);
+      $('.victory-message').html("<b>" + msg["victor"]["name"] + ":</b> " + msg["message"]);
     }
   });
 
   function updateBoard(msg) {
     for (var i = 0; i <= 24; i++) {
       var sqNum = msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["number"];
-      $("#square-" + i).text(sqNum);
+      $(".square-" + i).text(sqNum);
       if(msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["called"]) {
-        $('#square-'+ i).addClass("called");
+        $('.square-'+ i).addClass("called");
+      } else {
+        $('.square-'+ i).removeClass("called");
       }
     }
   }
+
+  $('#victory-button').click(function() {
+    var msg = $('#victory-text').val() || "Wow, this must be what it's like to be a Tiger! GO TIGERS!"
+    send("victory_msg", msg);
+  });
+
 </script>

@@ -4,5 +4,5 @@
 <%= form_for(:players, url: {controller: :players, action: :create}) do |f| %>
   Name: <%= f.text_field :name %>
   <%= hidden_field_tag "players[room_id]", @room.id %>
-  <%= f.submit "Join" %>
+  <%= f.submit "Join", class: "btn btn-primary"  %>
 <% end %>

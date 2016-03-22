@@ -68,11 +68,12 @@ class MessagesController < WebsocketRails::BaseController
         send_bingo_update room
       else
         controller_store[room][:victor] = victor
-        broadcast_message room, {type: "game_over", turn: nil, players: controller_store[room][:players], victor: {id: victor, name: controller_store[room][:players][victor]["name"]}}
+        broadcast_message room, {type: "game_over", turn: nil, players: controller_store[room][:players], victor: {id: victor, name: controller_store[room][:players][victor][:name]}}
       end
 
     elsif msg["type"] == "victory_msg" and player == controller_store[room][:victor]
-      send_message(room, "victory_msg", msg["message"])
+      victor = controller_store[room][:victor]
+      broadcast_message room, {type: "victory_msg", message: msg["message"], victor: {id: victor, name: controller_store[room][:players][victor][:name]}}
       delete_room(room)
     end
   end
