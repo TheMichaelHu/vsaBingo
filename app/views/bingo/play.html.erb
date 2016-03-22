@@ -38,6 +38,7 @@
           </div>
           <div class="modal-footer">
             <%= button_to "Back to Lobby", {controller: :lobby, action: :index}, {class: "btn btn-primary", method: 'get'} %>
+            <%= button_to "Back to Room", {controller: :lobby, action: :join, code: @room.code}, {class: "btn btn-default"} %>
           </div>
         </div>
       </div>
@@ -62,6 +63,7 @@
           </div>
           <div class="modal-footer">
             <%= button_to "Back to Lobby", {controller: :lobby, action: :index}, {class: "btn btn-primary", method: 'get'} %>
+            <%= button_to "Back to Room", {controller: :lobby, action: :join, code: @room.code}, {class: "btn btn-default"} %>
           </div>
         </div>
       </div>
@@ -154,6 +156,8 @@
         $(".square-" + i).text(sqNum);
         if(msg["players"][msg["victor"]["id"]]["board"][Math.floor(i/5)][i%5]["called"]) {
           $('.square-'+ i).addClass("called");
+        } else {
+          $('.square-'+ i).removeClass("called");
         }
       }
 

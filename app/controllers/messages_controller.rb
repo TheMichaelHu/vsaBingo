@@ -22,7 +22,7 @@ class MessagesController < WebsocketRails::BaseController
       controller_store[room][:players].delete player
       send_room_update room
 
-    elsif msg["type"] == "start" #and !controller_store[room][:starting]
+    elsif msg["type"] == "start" and !controller_store[room][:starting]
       controller_store[room][:num_players] = controller_store[room][:players].length
       controller_store[room][:starting] = true
       controller_store[room][:started] = false
@@ -61,9 +61,12 @@ class MessagesController < WebsocketRails::BaseController
         controller_store[room][:players][players[n]][:next] = {id: players[n - 1], name: Player.find(players[n - 1]).name}
       end
 
+    elsif msg["type"] == "leave"
+      controller_store[room][:players].delete player
+
     elsif msg["type"] == "number" and player == controller_store[room][:turn][:id]
       handle_number(room, msg["message"].to_i)
-      victor = get_victor(room, 1)
+      victor = get_victor(room, 5)
       if victor.nil?
         send_bingo_update room
       else
@@ -87,6 +90,7 @@ class MessagesController < WebsocketRails::BaseController
   end
 
   def handle_start(room)
+    controller_store[room][:starting] = false
     players = controller_store[room][:players].keys
     boards = generate_boards(players.length, (10..60).to_a, 25, 0.8)
     controller_store[room][:numbers] = []
@@ -183,6 +187,7 @@ class MessagesController < WebsocketRails::BaseController
     Player.where(room_id: room).each do |player|
       player.delete
     end
-    Room.find(room).delete
+    controller_store[room][:players] = {}
+    controller_store[room][:started] = false
   end
 end
