@@ -63,7 +63,7 @@ class MessagesController < WebsocketRails::BaseController
 
     elsif msg["type"] == "number" and player == controller_store[room][:turn][:id]
       handle_number(room, msg["message"].to_i)
-      victor = get_victor(room, 5)
+      victor = get_victor(room, 1)
       if victor.nil?
         send_bingo_update room
       else

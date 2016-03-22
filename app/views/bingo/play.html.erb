@@ -119,6 +119,7 @@
       updateBoard(msg);
       console.log("game over! " + msg["victor"]["name"] + " wins!");
       if(<%=@player.id%> == msg["victor"]["id"]) {
+        $('#myModal').modal("show");
         send("victory_msg", "I won!");
       }
     } else if(msg["type"] == "victory_msg") {
