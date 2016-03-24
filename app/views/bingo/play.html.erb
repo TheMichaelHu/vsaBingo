@@ -176,7 +176,7 @@
         startTimer();
       }
       $('.main-card .bingo-square').off( "click" );
-      $('.main-card .bingo-square').click(function() {
+      $('.main-card .bingo-square').not('.called').click(function() {
           send("number", $(this).text());
           stopTimer();
         });
