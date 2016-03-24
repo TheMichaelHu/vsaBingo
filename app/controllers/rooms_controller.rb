@@ -6,8 +6,6 @@ class RoomsController < ApplicationController
 
   def create
     @room = Room.new(room_params)
-    room_code = (0...5).map do ('A'..'Z').to_a[rand(26)] end.join
-    @room.code = room_code
     if @room.save
       @player = Player.create(name: params[:players][:name], room_id: @room.id)
       cookies[:player_id] = @player.id

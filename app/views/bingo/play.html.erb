@@ -1,20 +1,45 @@
 <div id="bingo">
-  <center>
-    <h1>
-        <div class = "timer" ><span id="timestring"></span></div>
-    </h1>
+  <center class="alert-area"><h1 id="your-turn"><b>YOUR TURN!!!</b></h1></center>
+  <div class="container">
+    <center>
+      <h2>
+          <div class = "timer" ><span id="timestring">&nbsp;</span></div>
+      </h2>
 
-    <div class = "player-info"> Player Name: " <%= @player.name %>
-    </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="player-info"> <b>Your Name: </b><%= @player.name %></div>
+        </div>
+        <div class="col-xs-6">
+          <b>Turn: </b><span class="current-player">&nbsp;</span>
+        </div>
+      </div>
 
-    <div class = "current-player">  </div>
+      <div class="main-card bingo-card">
+        <% for i in 0..24 do %>
+           <div class="bingo-square <%= "square-#{i}" %>"> &nbsp; </div>
+        <% end %>
+      </div>
+    </center>
 
-    <div class="bingo-card">
-      <% for i in 0..24 do %>
-         <div class="bingo-square <%= "square-#{i}" %>"> &nbsp; </div>
+    <div class="last-numbers">
+      <h2>Last numbers called:</h2>
+      <div class="row">
+        <div class="col-xs-1"></div>
+      <% for i in 0..4 do %>
+        <div class="col-xs-2">
+          <center>
+            <div class="last-number">
+              <div class="<%= "player-#{i}" %>">&nbsp;</div>
+              <h2><div class="<%= "number-#{i}" %>">&nbsp;</div></h2>
+            </div>
+          </center>
+        </div>
       <% end %>
     </div>
+  </div>
 
+  <center>
     <div class="modal fade" id="win-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -73,47 +98,50 @@
 </div>
 
 <script>
-  var hasBeenClicked = false
-  function startTimer(duration, display) {
-      var timer = duration, minutes, seconds;
-      timestring = "You will combust in " + minutes + ":" + seconds + " seconds!"
+  var timer;
+  var timerStart = false;
+
+  function initTimer() {
       setInterval(function () {
-          minutes = parseInt(timer / 60, 10);
-          seconds = parseInt(timer % 60, 10);
-
-          minutes = minutes < 10 ? "0" + minutes : minutes;
-          seconds = seconds < 10 ? "0" + seconds : seconds;
-
-          display.textContent = timestring
-
-          if (hasBeenClicked == true) {
-            timestring = "thx bruh -- now wait for other peeps"
-            display.textContent = timestring
+        if(timerStart) {
+          timer -= .5;
+          if (timer == 0) {
+            sendRandom();
+            stopTimer();
+          } else {
+            $('#timestring').text("Please make a move in " + Math.ceil(timer) + " seconds!")
           }
-
-          else if (timer > 0) {
-            timer--
-            timestring = "You will combust in " + timer + " seconds!"
-            display.textContent = timestring
-          }
-
-          else if (timer == 0) {
-            // DO SOMETHING
-            timer--
-          }
-
-          else {
-            timestring = "TIMES UP boob"
-            display.textContent = timestring
-          }
-      }, 1000);
+        }
+      }, 500);
   }
 
+  function startTimer() {
+    timer = 15;
+    timerStart = true;
+  }
+
+  function stopTimer() {
+    timerStart = false;
+    $('#timestring').text("Waiting for your turn...");
+  }
+
+  function sendRandom() {
+    var uncalled = [];
+    $('.main-card .bingo-square').each(function(index, element) {
+      if(!$(this).hasClass('called')) {
+        uncalled.push(index);
+      }
+    });
+    index = Math.floor(Math.random()*uncalled.length);
+    send("number", $('.main-card .square-'+ uncalled[index]).text());
+  }
 
   window.onload = function () {
-      var fifteensecs = 15,
-          display = document.querySelector('#timestring');
-      startTimer(fifteensecs, display);
+      initTimer();
+      stopTimer();
+      setInterval(function () {
+        send("heartbeat");
+      }, 30000);
   };
 
   function send(type, message) {
@@ -136,14 +164,19 @@
   dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
     if(msg["type"] == "update") {
       updateBoard(msg);
+      updateNumbers(msg);
+      $(".current-player").text(msg["turn"]["name"]);
 
-      $(".current-player").text("Current Player: " + msg["turn"]["name"])
+      if(msg["turn"]["id"] == <%=@player.id%>) {
+        $("#your-turn").fadeIn(300).fadeOut(300).fadeIn(300).fadeOut(300).fadeIn(300).fadeOut(300);
+        startTimer();
+      }
+      $('.main-card .bingo-square').off( "click" );
+      $('.main-card .bingo-square').click(function() {
+          send("number", $(this).text());
+          stopTimer();
+        });
 
-      $('.bingo-square').off( "click" );
-      $('.bingo-square').click(function() {
-        send("number", $(this).text());
-        hasBeenClicked = true;
-      });
     } else if(msg["type"] == "game_over") {
       if(<%=@player.id%> == msg["victor"]["id"]) {
         $('#win-modal').modal("show");
@@ -169,12 +202,21 @@
   function updateBoard(msg) {
     for (var i = 0; i <= 24; i++) {
       var sqNum = msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["number"];
-      $(".square-" + i).text(sqNum);
+      $(".main-card .square-" + i).text(sqNum);
       if(msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["called"]) {
-        $('.square-'+ i).addClass("called");
+        $('.main-card .square-'+ i).addClass("called");
       } else {
-        $('.square-'+ i).removeClass("called");
+        $('.main-card .square-'+ i).removeClass("called");
       }
+    }
+  }
+
+  function updateNumbers(msg) {
+    numbers = msg["numbers"]
+    names = msg["names"]
+    for (var i = 0; i < numbers.length; i++) {
+      $('.last-numbers .player-'+ i).text(names[i] + ':');
+      $('.last-numbers .number-'+ i).text(numbers[i]);
     }
   }
 

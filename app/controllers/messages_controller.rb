@@ -82,7 +82,7 @@ class MessagesController < WebsocketRails::BaseController
   end
 
   def send_bingo_update(room)
-    broadcast_message room, {type: "update", turn: controller_store[room][:turn], players: controller_store[room][:players]}
+    broadcast_message room, {type: "update", turn: controller_store[room][:turn], players: controller_store[room][:players], numbers: controller_store[room][:numbers].last(5), names: controller_store[room][:numbers_names].last(5)}
   end
 
   def send_message(room, type, message="")
@@ -94,6 +94,7 @@ class MessagesController < WebsocketRails::BaseController
     players = controller_store[room][:players].keys
     boards = generate_boards(players.length, (10..60).to_a, 25, 0.8)
     controller_store[room][:numbers] = []
+    controller_store[room][:numbers_names] = []
     (players.length).times do |n|
       controller_store[room][:players][players[n]][:name] = Player.find(players[n]).name # should refactor into one query
       controller_store[room][:players][players[n]][:board] = boards[n]
@@ -119,6 +120,7 @@ class MessagesController < WebsocketRails::BaseController
         end
       end
       controller_store[room][:numbers].push number
+      controller_store[room][:numbers_names].push controller_store[room][:turn][:name]
       next_turn(room)
     end
   end
@@ -152,7 +154,6 @@ class MessagesController < WebsocketRails::BaseController
 
   def get_victor(room, points)
     controller_store[room][:players].each do |key, value|
-      puts "PLAYER #{key} has #{board_points(value[:board])} points out of #{points}"
       if board_points(value[:board]) >= points
         return key
       end

@@ -8,6 +8,12 @@
     send("join");
   };
 
+  window.onload = function () {
+    setInterval(function () {
+      send("heartbeat");
+    }, 30000);
+  };
+
   window.onbeforeunload = function() {
     send("leave");
   };

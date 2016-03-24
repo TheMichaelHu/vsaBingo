@@ -3,30 +3,37 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 #bingo {
-  .bingo-card {
-      width: 250px;
-      height: 250px;
-      background-color: #a7d3f3
+  .alert-area {
+    min-height: 40px;
+
+    #your-turn {
+      display: none;
+      width: 100%;
+      height: 100%;
+      background-color: #FA8072;
+      color: white;
+      margin: 0px;
+    }
   }
 
-  .player-info {
-    text-align: center;
+  .bingo-card {
+      padding-top: 20px;
+      width: 250px;
+      height: 250px;
   }
-  .bingo-card .bingo-square {
+
+  .bingo-square {
       width: 50px;
       height: 50px;
       outline: 1px solid;
       float: left;
       text-align: center;
       vertical-align: middle;
+      background-color: #a7d3f3
   }
 
-  .bingo-card .bingo-square:hover {
+  .main-card .bingo-square:hover {
     background-color: #00ff99;
-  }
-
-  .bingo-card .bingo-square:active {
-    background-color: #eee;
   }
 
   .called {
@@ -36,5 +43,19 @@
   .modal-footer .btn {
     float: right;
     margin: 5px;
+  }
+
+  .last-numbers {
+    padding-top: 20px;
+    .last-number {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 5px solid;
+      padding-top: 15px;
+      h2 {
+        margin-top: 5px;
+      }
+    }
   }
 }
