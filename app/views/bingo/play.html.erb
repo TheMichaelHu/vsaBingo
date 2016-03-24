@@ -206,7 +206,7 @@
   function updateBoard(msg) {
     for (var i = 0; i <= 24; i++) {
       var sqNum = msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["number"];
-      $(".main-card .square-" + i).text(sqNum);
+      $(".main-card .square-" + i).html('<h2>' + sqNum + '</h2>');
       if(msg["players"][<%=@player.id%>]["board"][Math.floor(i/5)][i%5]["called"]) {
         $('.main-card .square-'+ i).addClass("called");
       } else {

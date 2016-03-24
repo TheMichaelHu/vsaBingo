@@ -41,6 +41,10 @@
       padding-top: 20px;
       width: 90%;
       height: auto;
+      h2 {
+        margin-top: 32px;
+        font-size: 40px;
+      }
     }
 
     .bingo-square {
@@ -54,7 +58,9 @@
     }
 
     .bingo-square:hover {
-      background-color: #00ff99;
+      @media (max-width: $screen-xs-max) {
+        background-color: #00ff99;
+      }
     }
 
     .called {
