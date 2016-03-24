@@ -16,8 +16,15 @@
       </div>
 
       <div class="main-card bingo-card">
-        <% for i in 0..24 do %>
-           <div class="bingo-square <%= "square-#{i}" %>"> &nbsp; </div>
+        <% for row in 0..4 do %>
+          <div class="row">
+            <div class="col-xs-1"></div>
+          <% for col in 0..4 do %>
+            <div class="col-xs-2">
+              <div class="bingo-square <%= "square-#{row*5 + col}" %>"> &nbsp; </div>
+            </div>
+          <% end %>
+          </div>
         <% end %>
       </div>
     </center>
@@ -139,9 +146,6 @@
   window.onload = function () {
       initTimer();
       stopTimer();
-      setInterval(function () {
-        send("heartbeat");
-      }, 30000);
   };
 
   function send(type, message) {
