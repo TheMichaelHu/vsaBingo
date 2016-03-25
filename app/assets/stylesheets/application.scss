@@ -16,16 +16,15 @@
 @import "font-awesome";
 @import "bingo";
 
+@font-face {
+  font-family: 'Haymaker';
+  src:font-url('Haymaker.ttf');
+  src:font-url('Haymaker.ttf') format('truetype');
+}
 
 body {
-
-  @font-face {
-      font-family: haymaker;
-      src: url(../fonts/Haymaker.ttf);
-  }
-
+  font-family: 'Haymaker';
   background-color: black;
   color: white;
-  h1 {font-family: haymaker;}
 
 }
