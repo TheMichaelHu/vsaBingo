@@ -27,10 +27,13 @@ body {
   background-color: black;
   color: white;
 
-}
+  .btn-primary {
+    background-color: #fff000 ;
+    color: black;
+    border-color:black;
+  }
 
-.btn-primary {
-  background-color: #fff000 ;
-  color: black;
-  border-color:black;
+  input {
+    color:black;
+  }
 }
