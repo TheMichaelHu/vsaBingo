@@ -38,7 +38,7 @@
           <center>
             <div class="last-number">
               <div class="<%= "player-#{i}" %>">&nbsp;</div>
-              <h2><div class="<%= "number-#{i}" %>">&nbsp;</div></h2>
+              <h2 id = "CircleNum"><div class="<%= "number-#{i}" %>">&nbsp;</div></h2>
             </div>
           </center>
         </div>
@@ -187,7 +187,7 @@
       } else {
         $('#lose-modal').modal("show");
       }
-      
+
       for (var i = 0; i <= 24; i++) {
         var sqNum = msg["players"][msg["victor"]["id"]]["board"][Math.floor(i/5)][i%5]["number"];
         $(".square-" + i).text(sqNum);

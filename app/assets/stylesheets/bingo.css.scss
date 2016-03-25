@@ -3,7 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 #bingo {
-  .alert-area {
+.alert-area {
     min-height: 40px;
 
     #your-turn {
@@ -41,13 +41,21 @@
       padding-top: 20px;
       width: 90%;
       height: auto;
-      h2 {
+      #CircleNum {
+        @media(max-width: $screen-xs-max) {
+          font-size:12px;
+          padding-bottom: 10px;
+        }
         margin-top: 32px;
         font-size: 40px;
       }
     }
 
     .bingo-square {
+      @media(max-width: $screen-xs-max) {
+        width: 100%;
+        height: 60px;
+      }
       width: 100%;
       height: 113px;
       outline: 1px solid black;
@@ -58,8 +66,9 @@
     }
 
     .bingo-square:hover {
+      background-color: #6687ff;
       @media (max-width: $screen-xs-max) {
-        background-color: #6687ff;
+        background-color: #002ed4;
       }
     }
 
@@ -72,6 +81,9 @@
     background-color: red;
   }
 
+  .modal-content {
+    color:black;
+  }
   .modal-footer .btn {
     float: right;
     margin: 5px;
@@ -80,6 +92,12 @@
   .last-numbers {
     padding-top: 20px;
     .last-number {
+      @media(max-width: $screen-xs-max) {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        padding-top:9px;
+      }
       width: 100px;
       height: 100px;
       border-radius: 50%;
