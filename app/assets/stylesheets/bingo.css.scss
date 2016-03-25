@@ -11,7 +11,7 @@
       width: 100%;
       height: 100%;
       background-color: #FA8072;
-      color: white;
+      color: black;
       margin: 0px;
     }
   }
@@ -25,11 +25,11 @@
   .bingo-square {
       width: 50px;
       height: 50px;
-      outline: 1px solid;
+      outline: 1px solid black;
       float: left;
       text-align: center;
       vertical-align: middle;
-      background-color: #a7d3f3
+      background-color: #002ed4;
   }
 
   .main-card {
@@ -50,11 +50,11 @@
     .bingo-square {
       width: 100%;
       height: 113px;
-      outline: 1px solid;
+      outline: 1px solid black;
       float: left;
       text-align: center;
       vertical-align: middle;
-      background-color: #a7d3f3
+      background-color: #002ed4;
     }
 
     .bingo-square:hover {
