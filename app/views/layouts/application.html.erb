@@ -18,13 +18,6 @@
   var dispatcher = new WebSocketRails("localhost:3001/websocket");
 </script>
 <% end %>
-<script>
-  window.onload = function () {
-    setInterval(function () {
-      dispatcher.trigger("bingo_message", "heartbeat");
-    }, 30000);
-  };
-</script>
 
 <%= yield %>
 
