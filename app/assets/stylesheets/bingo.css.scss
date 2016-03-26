@@ -9,12 +9,19 @@
   $called-color: #faf69d;
 
   .alert-area {
-    min-height: 50px;
+    padding-top: 10px;
+    min-height: 100px;
     position: relative;
 
     #text {
       position: absolute;
       width: 100%;
+      font-size: 17px;
+      h1 {
+        margin-top: 0px;
+        font-size: 80px;
+        color: $called-color
+      }
     }
 
     #your-turn {
@@ -24,14 +31,13 @@
       background-color: #FA8072;
       color: white;
       margin: 0px;
-      padding-top: 10px;
+      padding-top: 35px;
       position: absolute;
       z-index:1;
     }
   }
 
   .bingo-card {
-      padding-top: 20px;
       width: 250px;
       height: 250px;
   }
@@ -53,9 +59,12 @@
     }
 
     &.bingo-card {
-      padding-top: 20px;
+      margin-top: 10px;
+      padding: 10px;
       width: 90%;
       height: auto;
+      background-color: #050505;
+      border-radius: 10%;
     }
 
     .bingo-square {
@@ -116,7 +125,7 @@
   }
 
   .last-numbers {
-    padding-top: 20px;
+    padding-top: 10px;
     .last-number {
       @media(max-width: $screen-xs-max) {
         width: 50px;
@@ -141,5 +150,9 @@
       margin-top: 0px;
       font-size: 40px;
     }
+  }
+
+  .victory-message #msg {
+    font-size: 30px;
   }
 }

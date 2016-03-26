@@ -22,7 +22,8 @@
   src:font-url('Haymaker.ttf') format('truetype');
 }
 
-$button-color: #060941;
+$button-color: #333;
+$button-hover-color: #eee;
 
 body {
   font-family: 'Haymaker';
@@ -33,6 +34,12 @@ body {
     background-color: $button-color;
     color: white;
     border-color:black;
+
+    &:hover, &:focus, &:active {
+      background-color: $button-hover-color;
+      color: black;
+      border-color:black;
+    }
   }
 
   input {

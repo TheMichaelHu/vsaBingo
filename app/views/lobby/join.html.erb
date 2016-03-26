@@ -1,8 +1,9 @@
 <!-- MOVE THIS TO A MODAL IN LOBBY -->
-
-<h2>Joining room: <b><%= @room.name %></b> (<%= @room.code %>)</h2>
-<%= form_for(:players, url: {controller: :players, action: :create}) do |f| %>
-  Name: <%= f.text_field :name %>
-  <%= hidden_field_tag "players[room_id]", @room.id %>
-  <%= f.submit "Join", class: "btn btn-primary"  %>
-<% end %>
+<div class="container">
+  <h2>Joining room: <b><%= @room.name %></b> (<%= @room.code %>)</h2>
+  <%= form_for(:players, url: {controller: :players, action: :create}) do |f| %>
+    Name: <%= f.text_field :name %>
+    <%= hidden_field_tag "players[room_id]", @room.id %>
+    <%= f.submit "Join", class: "btn btn-primary"  %>
+  <% end %>
+</div>

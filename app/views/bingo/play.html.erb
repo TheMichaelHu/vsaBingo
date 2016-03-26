@@ -1,7 +1,9 @@
 <div id="bingo">
   <center class="alert-area">
     <div id='text'>
-      <h1>heyyyy</h1>
+      VSA Saigon by Night
+      <br>
+      <h1>BINGO</h1>
     </div>
     <h1 id="your-turn">
       <b>YOUR TURN!!!</b>
@@ -9,9 +11,9 @@
   </center>
   <div class="container">
     <center>
-      <h2>
+      <h3>
           <div class = "timer" ><span id="timestring">&nbsp;</span></div>
-      </h2>
+      </h3>
 
       <div class="row">
         <div class="col-xs-6">
@@ -37,7 +39,7 @@
     </center>
 
     <div class="last-numbers">
-      <h2>Last numbers called:</h2>
+      <h3>Last numbers called:</h3>
       <div class="row">
         <div class="col-xs-1"></div>
       <% for i in 0..4 do %>
@@ -161,7 +163,7 @@
         $(".current-player").text(msg["turn"]["name"]);
 
         if(msg["turn"]["id"] == <%=@player.id%>) {
-          $("#your-turn").fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200);
+          $("#your-turn").fadeIn(100).delay(200).fadeOut(100).fadeIn(100).delay(200).fadeOut(100).fadeIn(100).delay(200).fadeOut(100);
           startTimer();
         }
         $('.main-card .bingo-square').off( "click" );
@@ -174,6 +176,7 @@
         if(<%=@player.id%> == msg["victor"]["id"]) {
           $('#win-modal').modal("show");
         } else {
+          $('#lose-modal .modal-title').html('<b>' + msg["victor"]["name"] + '</b>' + " wins!");
           $('#lose-modal').modal("show");
         }
 
@@ -188,7 +191,7 @@
         }
 
       } else if(msg["type"] == "victory_msg") {
-        $('.victory-message').html("<b>" + msg["victor"]["name"] + ":</b> " + msg["message"]);
+        $('.victory-message').html("<span id='msg'><b>" + msg["victor"]["name"] + ":</b> " + msg["message"] + "</span>");
       }
     });
 
@@ -196,7 +199,7 @@
     stopTimer();
     join_interval = setInterval(function() {
       send("join");
-    }, 1000);
+    }, 500);
   };
 
   function send(type, message) {
