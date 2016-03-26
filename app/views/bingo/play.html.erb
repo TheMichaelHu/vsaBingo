@@ -1,5 +1,12 @@
 <div id="bingo">
-  <center class="alert-area"><h1 id="your-turn"><b>YOUR TURN!!!</b></h1></center>
+  <center class="alert-area">
+    <div id='text'>
+      <h1>heyyyy</h1>
+    </div>
+    <h1 id="your-turn">
+      <b>YOUR TURN!!!</b>
+    </h1>
+  </center>
   <div class="container">
     <center>
       <h2>
@@ -37,7 +44,7 @@
         <div class="col-xs-2">
           <center>
             <div class="last-number">
-              <div class="<%= "player-#{i}" %>">&nbsp;</div>
+              <div class="<%= "player-#{i}" %> hidden-xs">&nbsp;</div>
               <h2 id = "CircleNum"><div class="<%= "number-#{i}" %>">&nbsp;</div></h2>
             </div>
           </center>
@@ -107,6 +114,7 @@
 <script>
   var timer;
   var timerStart = false;
+  var join_interval;
 
   function initTimer() {
       setInterval(function () {
@@ -144,8 +152,51 @@
   }
 
   window.onload = function () {
-      initTimer();
-      stopTimer();
+
+    dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
+      if(msg["type"] == "update") {
+        clearInterval(join_interval);
+        updateBoard(msg);
+        updateNumbers(msg);
+        $(".current-player").text(msg["turn"]["name"]);
+
+        if(msg["turn"]["id"] == <%=@player.id%>) {
+          $("#your-turn").fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200);
+          startTimer();
+        }
+        $('.main-card .bingo-square').off( "click" );
+        $('.main-card .bingo-square').not('.called').click(function() {
+            send("number", $(this).text());
+            stopTimer();
+          });
+
+      } else if(msg["type"] == "game_over") {
+        if(<%=@player.id%> == msg["victor"]["id"]) {
+          $('#win-modal').modal("show");
+        } else {
+          $('#lose-modal').modal("show");
+        }
+
+        for (var i = 0; i <= 24; i++) {
+          var sqNum = msg["players"][msg["victor"]["id"]]["board"][Math.floor(i/5)][i%5]["number"];
+          $(".square-" + i).text(sqNum);
+          if(msg["players"][msg["victor"]["id"]]["board"][Math.floor(i/5)][i%5]["called"]) {
+            $('.square-'+ i).addClass("called");
+          } else {
+            $('.square-'+ i).removeClass("called");
+          }
+        }
+
+      } else if(msg["type"] == "victory_msg") {
+        $('.victory-message').html("<b>" + msg["victor"]["name"] + ":</b> " + msg["message"]);
+      }
+    });
+
+    initTimer();
+    stopTimer();
+    join_interval = setInterval(function() {
+      send("join");
+    }, 1000);
   };
 
   function send(type, message) {
@@ -157,51 +208,9 @@
     dispatcher.trigger("bingo_message", msg);
   }
 
-  dispatcher.on_open = function() {
-    send("join");
-  };
-
   window.onbeforeunload = function() {
     send("leave");
   };
-
-  dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
-    if(msg["type"] == "update") {
-      updateBoard(msg);
-      updateNumbers(msg);
-      $(".current-player").text(msg["turn"]["name"]);
-
-      if(msg["turn"]["id"] == <%=@player.id%>) {
-        $("#your-turn").fadeIn(300).fadeOut(300).fadeIn(300).fadeOut(300).fadeIn(300).fadeOut(300);
-        startTimer();
-      }
-      $('.main-card .bingo-square').off( "click" );
-      $('.main-card .bingo-square').not('.called').click(function() {
-          send("number", $(this).text());
-          stopTimer();
-        });
-
-    } else if(msg["type"] == "game_over") {
-      if(<%=@player.id%> == msg["victor"]["id"]) {
-        $('#win-modal').modal("show");
-      } else {
-        $('#lose-modal').modal("show");
-      }
-
-      for (var i = 0; i <= 24; i++) {
-        var sqNum = msg["players"][msg["victor"]["id"]]["board"][Math.floor(i/5)][i%5]["number"];
-        $(".square-" + i).text(sqNum);
-        if(msg["players"][msg["victor"]["id"]]["board"][Math.floor(i/5)][i%5]["called"]) {
-          $('.square-'+ i).addClass("called");
-        } else {
-          $('.square-'+ i).removeClass("called");
-        }
-      }
-
-    } else if(msg["type"] == "victory_msg") {
-      $('.victory-message').html("<b>" + msg["victor"]["name"] + ":</b> " + msg["message"]);
-    }
-  });
 
   function updateBoard(msg) {
     for (var i = 0; i <= 24; i++) {

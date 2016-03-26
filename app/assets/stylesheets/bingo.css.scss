@@ -3,16 +3,30 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 #bingo {
-.alert-area {
-    min-height: 40px;
+
+  $square-color: #222;
+  $hover-color: #eee;
+  $called-color: #faf69d;
+
+  .alert-area {
+    min-height: 50px;
+    position: relative;
+
+    #text {
+      position: absolute;
+      width: 100%;
+    }
 
     #your-turn {
       display: none;
       width: 100%;
       height: 100%;
       background-color: #FA8072;
-      color: black;
+      color: white;
       margin: 0px;
+      padding-top: 10px;
+      position: absolute;
+      z-index:1;
     }
   }
 
@@ -25,11 +39,12 @@
   .bingo-square {
       width: 50px;
       height: 50px;
-      outline: 1px solid black;
+      border: 1px solid black;
+      border-radius: 50%;
       float: left;
       text-align: center;
       vertical-align: middle;
-      background-color: #002ed4;
+      background-color: $square-color;
   }
 
   .main-card {
@@ -41,14 +56,6 @@
       padding-top: 20px;
       width: 90%;
       height: auto;
-      #CircleNum {
-        @media(max-width: $screen-xs-max) {
-          font-size:12px;
-          padding-bottom: 10px;
-        }
-        margin-top: 32px;
-        font-size: 40px;
-      }
     }
 
     .bingo-square {
@@ -58,27 +65,46 @@
       }
       width: 100%;
       height: 113px;
-      outline: 1px solid black;
+      border: 1px solid black;
+      border-radius: 50%;
       float: left;
       text-align: center;
       vertical-align: middle;
-      background-color: #002ed4;
+      background-color: $square-color;
+      h2 {
+        @media(max-width: $screen-xs-max) {
+          font-size:25px;
+          margin-top: 20px;
+        }
+        margin-top: 32px;
+        font-size: 40px;
+      }
     }
 
     .bingo-square:hover {
-      background-color: #6687ff;
+      background-color: $hover-color;
+      color: black;
       @media (max-width: $screen-xs-max) {
-        background-color: #002ed4;
+        background-color: $called-color;
+        color: white;
       }
     }
 
     .called {
-      background-color: red;
+      background-color: $called-color;
+      color: black;
+      &:hover {
+        background-color: $called-color;
+      }
     }
   }
 
   .called {
-    background-color: red;
+    background-color: $called-color;
+    color: black;
+    &:hover {
+      background-color: $called-color;
+    }
   }
 
   .modal-content {
@@ -101,11 +127,19 @@
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      border: 5px solid;
+      border: 5px solid #eee;
+      color: #333;
       padding-top: 15px;
-      h2 {
-        margin-top: 5px;
+      background-color: $called-color;
+    }
+    #CircleNum {
+      @media(max-width: $screen-xs-max) {
+        font-size:25px;
+        padding-bottom: 10px;
+        margin: 0px;
       }
+      margin-top: 0px;
+      font-size: 40px;
     }
   }
 }

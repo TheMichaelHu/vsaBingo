@@ -22,14 +22,16 @@
   src:font-url('Haymaker.ttf') format('truetype');
 }
 
+$button-color: #060941;
+
 body {
   font-family: 'Haymaker';
   background-color: black;
   color: white;
 
   .btn-primary {
-    background-color: #fff000 ;
-    color: black;
+    background-color: $button-color;
+    color: white;
     border-color:black;
   }
 

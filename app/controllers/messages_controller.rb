@@ -15,17 +15,21 @@ class MessagesController < WebsocketRails::BaseController
     if msg["type"] == "join"
       controller_store[room] ||= {}
       controller_store[room][:players] ||= {}
-      controller_store[room][:players][player] = {}
+      if !controller_store[room][:started]
+        controller_store[room][:players][player] = {}
+      end
       send_room_update room
 
     elsif msg["type"] == "leave" and !controller_store[room][:starting]
       controller_store[room][:players].delete player
       send_room_update room
 
-    elsif msg["type"] == "start" and !controller_store[room][:starting]
-      controller_store[room][:num_players] = controller_store[room][:players].length
-      controller_store[room][:starting] = true
-      controller_store[room][:started] = false
+    elsif msg["type"] == "start"
+      if !controller_store[room][:starting]
+        controller_store[room][:num_players] = controller_store[room][:players].length
+        controller_store[room][:starting] = true
+        controller_store[room][:started] = false
+      end
       send_message room, "start"
     end
   end
@@ -40,6 +44,8 @@ class MessagesController < WebsocketRails::BaseController
     player = msg["player"]
     players = controller_store[room][:players]
 
+
+
     if msg["type"] == "join" and !controller_store[room][:started]
       if players.keys.include? player
         players[player][:joined] = true
@@ -53,16 +59,18 @@ class MessagesController < WebsocketRails::BaseController
         handle_start(room)
       end
 
-    elsif msg["type"] == "leave" and controller_store[room][:started]
-      next_turn(room) if controller_store[room][:turn].id == player
-      controller_store[room][:players].delete player
-      players = controller_store[room][:players].keys
-      (players.length).times do |n|
-        controller_store[room][:players][players[n]][:next] = {id: players[n - 1], name: Player.find(players[n - 1]).name}
-      end
-
     elsif msg["type"] == "leave"
-      controller_store[room][:players].delete player
+      players = players.keys
+      next_turn(room) if controller_store[room][:started] and controller_store[room][:turn][:id] == player
+      unless controller_store[room][:players].delete(player).nil?
+        players = controller_store[room][:players].keys
+        players.length.times do |n|
+          controller_store[room][:players][players[n]][:next] = {id: players[n - 1], name: Player.find(players[n - 1]).name}
+        end
+      end
+      send_bingo_update(room)
+
+      delete_room(room) if controller_store[room][:started] and players.length == 0
 
     elsif msg["type"] == "number" and player == controller_store[room][:turn][:id]
       handle_number(room, msg["message"].to_i)
@@ -185,9 +193,6 @@ class MessagesController < WebsocketRails::BaseController
 
   def delete_room(room)
     controller_store.delete room
-    Player.where(room_id: room).each do |player|
-      player.delete
-    end
     controller_store[room][:players] = {}
     controller_store[room][:started] = false
   end
