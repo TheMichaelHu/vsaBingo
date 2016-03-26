@@ -58,4 +58,23 @@ body {
       color: $called-color
     }
   }
+
+  .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding-top: 12px;
+    background-color: #333;
+
+    a {
+      color: #eee;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    @media(max-width: $screen-xs-max) {
+      font-size: 8px;
+    }
+  }
 }
