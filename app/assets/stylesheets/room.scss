@@ -1,3 +1,23 @@
 // Place all the styles related to the room controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.room {
+
+  #player-num {
+    color: $called-color;
+  }
+
+  .players-list-wrapper {
+    h1 {
+      color: $called-color;
+    }
+    .players-list {
+      padding: 0px;
+      list-style-type: none;
+    }
+  }
+
+  .form-group {
+    padding: 10px;
+  }
+}

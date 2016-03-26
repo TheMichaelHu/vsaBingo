@@ -66,8 +66,15 @@
             <h3>Your final board:</h3>
             <br>
             <div class="bingo-card">
-              <% for i in 0..24 do %>
-               <div class="bingo-square <%= "square-#{i}" %>"> &nbsp; </div>
+              <% for row in 0..4 do %>
+                <div class="row">
+                  <div class="col-xs-1"></div>
+                <% for col in 0..4 do %>
+                  <div class="col-xs-2">
+                    <div class="bingo-square <%= "square-#{row*5 + col}" %>"> &nbsp; </div>
+                  </div>
+                <% end %>
+                </div>
               <% end %>
             </div>
             <br>
@@ -95,8 +102,15 @@
             <h3>The winning board:</h3>
             <br>
             <div class="bingo-card">
-              <% for i in 0..24 do %>
-               <div class="bingo-square <%= "square-#{i}" %>"> &nbsp; </div>
+              <% for row in 0..4 do %>
+                <div class="row">
+                  <div class="col-xs-1"></div>
+                <% for col in 0..4 do %>
+                  <div class="col-xs-2">
+                    <div class="bingo-square <%= "square-#{row*5 + col}" %>"> &nbsp; </div>
+                  </div>
+                <% end %>
+                </div>
               <% end %>
             </div>
             <br>
@@ -182,7 +196,7 @@
 
         for (var i = 0; i <= 24; i++) {
           var sqNum = msg["players"][msg["victor"]["id"]]["board"][Math.floor(i/5)][i%5]["number"];
-          $(".square-" + i).text(sqNum);
+          $(".square-" + i).html('<h2>' + sqNum + '</h2>');
           if(msg["players"][msg["victor"]["id"]]["board"][Math.floor(i/5)][i%5]["called"]) {
             $('.square-'+ i).addClass("called");
           } else {
@@ -235,6 +249,16 @@
       $('.last-numbers .number-'+ i).text(numbers[i]);
     }
   }
+
+  $(window).ready(function() {
+    var cw = $('.bingo-square').width();
+    $('.bingo-square').css({'height':cw+'px'});
+  })
+
+  $(window).resize(function() {
+    var cw = $('.bingo-square').width();
+    $('.bingo-square').css({'height':cw+'px'});
+  })
 
   $('#victory-button').click(function() {
     var msg = $('#victory-text').val() || "Wow, this must be what it's like to be a Tiger! GO TIGERS!"

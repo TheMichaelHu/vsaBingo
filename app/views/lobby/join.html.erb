@@ -1,5 +1,12 @@
 <!-- MOVE THIS TO A MODAL IN LOBBY -->
 <div class="container">
+  <div id='text'>
+    <br>
+    VSA Presents:
+    <h1>Saigon by Night</h1>
+    <hr>
+  </div>
+  
   <h2>Joining room: <b><%= @room.name %></b> (<%= @room.code %>)</h2>
   <%= form_for(:players, url: {controller: :players, action: :create}) do |f| %>
     Name: <%= f.text_field :name %>

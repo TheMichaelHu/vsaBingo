@@ -16,7 +16,7 @@ class MessagesController < WebsocketRails::BaseController
       controller_store[room] ||= {}
       controller_store[room][:players] ||= {}
       if !controller_store[room][:started]
-        controller_store[room][:players][player] = {}
+        controller_store[room][:players][player] = {name: Player.find(player).name}
       end
       send_room_update room
 
@@ -44,8 +44,6 @@ class MessagesController < WebsocketRails::BaseController
     player = msg["player"]
     players = controller_store[room][:players]
 
-
-
     if msg["type"] == "join" and !controller_store[room][:started]
       if players.keys.include? player
         players[player][:joined] = true
@@ -65,7 +63,7 @@ class MessagesController < WebsocketRails::BaseController
       unless controller_store[room][:players].delete(player).nil?
         players = controller_store[room][:players].keys
         players.length.times do |n|
-          controller_store[room][:players][players[n]][:next] = {id: players[n - 1], name: Player.find(players[n - 1]).name}
+          controller_store[room][:players][players[n]][:next] = {id: players[n - 1], name: players[n - 1][:name]}
         end
       end
       send_bingo_update(room)
@@ -103,12 +101,11 @@ class MessagesController < WebsocketRails::BaseController
     boards = generate_boards(players.length, (10..60).to_a, 25, 0.8)
     controller_store[room][:numbers] = []
     controller_store[room][:numbers_names] = []
-    (players.length).times do |n|
-      controller_store[room][:players][players[n]][:name] = Player.find(players[n]).name # should refactor into one query
+    players.length.times do |n|
       controller_store[room][:players][players[n]][:board] = boards[n]
-      controller_store[room][:players][players[n]][:next] = {id: players[n - 1], name: Player.find(players[n - 1]).name}
+      controller_store[room][:players][players[n]][:next] = {id: players[n - 1], name: controller_store[room][:players][players[n - 1]][:name]}
     end
-    controller_store[room][:turn] = { id: players.first, name: Player.find(players.first).name }
+    controller_store[room][:turn] = { id: players.first, name: controller_store[room][:players][players.first][:name] }
     send_bingo_update room
   end
 

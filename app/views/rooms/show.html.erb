@@ -1,15 +1,21 @@
-<div class="container">
-  <h2>This is the show page for <b><%= @room.name %></b> (<%= @room.code %>)</h2>
-  <p>Your name is <%= @player.name %></p>
-  <p>There are currently <span id="player-num"></span> players in this room</p>
-  <button class="btn btn-primary start-btn">Let's play Bingo!</button>
+<div class="room">
+  <div class="container">
+    <h1><b><%= @room.name %></b> (<%= @room.code %>)</h1>
+    <h3>There are currently <span id="player-num"></span> players in this room</h3>
+    <button class="btn btn-primary start-btn btn-large">Let's play Bingo!</button>
+    <hr>
+    <div class="players-list-wrapper">
+      <h1>Players in <b><%= @room.name %></b></h1>
+      <ul class="players-list"></ul>
+    </div>
+  </div>
 </div>
 
 <script>
   window.onload = function () {
     dispatcher.bind(<%= @room.id.to_s %>, function(msg) {
       if(msg["type"] == "update") {
-        send("join");
+        updatePlayers(msg);
         $("#player-num").text(msg["count"])
       } else if (msg["type"] == "start") {
         window.location.href = "<%= bingo_url %>";
@@ -33,4 +39,12 @@
       "room": <%= @room.id %>}
     dispatcher.trigger("room_message", msg)
   }
+
+  function updatePlayers(msg) {
+    players = msg["players"];
+    $(".players-list").empty()
+    for(player in players) {
+      $(".players-list").append('<li><h3>' + players[player]["name"] + '</h3></li>');
+    }
+  } 
 </script>

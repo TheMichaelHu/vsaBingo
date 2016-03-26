@@ -1,17 +1,25 @@
-<div class="container">
-  <h2>Time to make a room!</h2>
+<div class='room'>
+  <div class="container">
+    <div id='text'>
+      <br>
+      VSA Presents:
+      <h1>Saigon by Night</h1>
+      <hr>
+    </div>
+    <h2>Time to make a room!</h2>
 
-  <%= form_for(:rooms, url: {action: :create}, html: {class: "form-inline"}) do |f| %>
-    <div class="form-group">
-      <%= label_tag(:name, "Room name:") %>
-      <%= f.text_field :name, class: "form-control" %>
-    </div>
-    <br>
-    <div class="form-group">
-      <%= label_tag("players[name]", "Your name:") %>
-      <%= text_field_tag "players[name]", nil, class: "form-control" %>
-    </div>
-    <br>
-    <%= f.submit "Create Room", class: "btn btn-primary" %>
-  <% end %>
+    <%= form_for(:rooms, url: {action: :create}, html: {class: "form-inline"}) do |f| %>
+      <div class="form-group">
+        <%= label_tag(:name, "Room name:") %>
+        <%= f.text_field :name, class: "form-control" %>
+      </div>
+      <br>
+      <div class="form-group">
+        <%= label_tag("players[name]", "Your name:") %>
+        <%= text_field_tag "players[name]", nil, class: "form-control" %>
+      </div>
+      <br>
+      <%= f.submit "Create Room", class: "btn btn-primary btn-large" %>
+    <% end %>
+  </div>
 </div>

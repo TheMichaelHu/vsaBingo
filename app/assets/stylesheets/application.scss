@@ -11,19 +11,18 @@
  * file per style scope.
  *
  */
+@import "variables";
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "font-awesome";
 @import "bingo";
+@import "room";
 
 @font-face {
   font-family: 'Haymaker';
   src:font-url('Haymaker.ttf');
   src:font-url('Haymaker.ttf') format('truetype');
 }
-
-$button-color: #333;
-$button-hover-color: #eee;
 
 body {
   font-family: 'Haymaker';
@@ -42,7 +41,21 @@ body {
     }
   }
 
+  .btn-large {
+    padding: 18px 36px;
+    font-size: 18px;
+  }
+
   input {
     color:black;
+  }
+
+  #text {
+    font-size: 17px;
+    h1 {
+      margin-top: 0px;
+      font-size: 45px;
+      color: $called-color
+    }
   }
 }
