@@ -24,6 +24,11 @@
   src:font-url('Haymaker.ttf') format('truetype');
 }
 
+html {
+  position: relative;
+  min-height: 100%;
+}
+
 body {
   font-family: 'Haymaker';
   background-color: black;

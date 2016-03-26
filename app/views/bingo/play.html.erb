@@ -251,13 +251,17 @@
   }
 
   $(window).ready(function() {
-    var cw = $('.bingo-square').width();
-    $('.bingo-square').css({'height':cw+'px'});
+    var cw = $('.main-card .bingo-square').width();
+    $('.main-card .bingo-square').css({'height':cw+'px'});
+    cw = $('.modal .bingo-square').width();
+    $('.modal .bingo-square').css({'height':cw+'px'});
   })
 
   $(window).resize(function() {
-    var cw = $('.bingo-square').width();
-    $('.bingo-square').css({'height':cw+'px'});
+    var cw = $('.main-card .bingo-square').width();
+    $('.main-card .bingo-square').css({'height':cw+'px'});
+    cw = $('.modal .bingo-square').width();
+    $('.modal .bingo-square').css({'height':cw+'px'});
   })
 
   $('#victory-button').click(function() {
